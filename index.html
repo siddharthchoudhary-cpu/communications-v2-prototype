@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communications V2 Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Raleway:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="mobileMenuButton" class="icon-button mobile-menu-button" aria-label="Open navigation">☰</button>
+    <button class="icon-button desktop-back" aria-label="Back">‹</button>
+    <strong>Communications</strong>
+    <label class="global-search">
+      <input id="globalSearch" type="search" placeholder="Search communications">
+      <span>⌕</span>
+    </label>
+    <button class="language-button">EN</button>
+    <button class="profile"><span>A</span> Administrator</button>
+    <button class="icon-button alert" aria-label="Alerts">!</button>
+    <button class="icon-button" aria-label="Apps">••</button>
+  </header>
+
+  <aside class="sidebar">
+    <div class="mobile-nav-header"><strong>Communications</strong><button id="mobileMenuClose" class="close-button">×</button></div>
+    <small>COMMUNICATIONS</small>
+    <nav>
+      <button class="nav-item active" data-page="communications">☰ <span>Communications</span></button>
+      <button class="nav-item" data-page="calendar">▦ <span>Calendar</span></button>
+      <button class="nav-item" data-page="drafts">✎ <span>Drafts</span></button>
+      <button class="nav-item" data-page="templates">▤ <span>Templates</span></button>
+      <button class="nav-item" data-page="analytics">↗ <span>Analytics</span></button>
+      <button class="nav-item">⌫ <span>Trash</span></button>
+    </nav>
+    <button class="primary compose-button" data-open-compose>＋ Compose</button>
+  </aside>
+  <div id="mobileNavScrim" class="mobile-nav-scrim hidden"></div>
+
+  <main id="communicationsPage">
+    <section class="page-heading">
+      <div>
+        <h1>Communications</h1>
+        <p>One place for messages, notices and circulars</p>
+      </div>
+      <button class="primary" data-open-compose>＋ Compose</button>
+    </section>
+
+    <section class="summary-grid" aria-label="Communication summaries">
+      <button class="summary active" data-summary="all">
+        <span class="summary-icon">A</span>
+        <strong>248</strong>
+        <b>All communications</b>
+        <small id="summaryPeriodLabel">Last 3 months</small>
+      </button>
+      <button class="summary" data-summary="Sent">
+        <span class="summary-icon green">S</span>
+        <strong>226</strong>
+        <b>Sent</b>
+        <small>Delivered or attempted</small>
+      </button>
+      <button class="summary" data-summary="Pending approval">
+        <span class="summary-icon amber">P</span>
+        <strong>6</strong>
+        <b>Pending approval</b>
+        <small>2 awaiting your review</small>
+      </button>
+      <button class="summary" data-summary="Scheduled">
+        <span class="summary-icon blue">S</span>
+        <strong>12</strong>
+        <b>Scheduled</b>
+        <small>Next 7 days</small>
+      </button>
+    </section>
+
+    <section class="list-card">
+      <div class="list-toolbar">
+        <div>
+          <h2 id="listTitle">All communications</h2>
+          <p>Summary cards filter this single list</p>
+        </div>
+        <div class="toolbar-actions">
+          <select id="listPeriod" class="period-select" aria-label="Communication period">
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option selected>Last 3 months</option>
+            <option>Last 6 months</option>
+            <option>This academic year</option>
+            <option>Custom range</option>
+          </select>
+          <input id="tableSearch" type="search" placeholder="Search campaign or keyword">
+          <button id="filterButton" class="secondary">Filters <span id="filterCount"></span></button>
+          <button id="refreshButton" class="secondary">Refresh</button>
+        </div>
+      </div>
+
+      <div id="activeFilters" class="active-filters"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaign name</th>
+              <th>Type</th>
+              <th>Audience</th>
+              <th>Channel</th>
+              <th>Status</th>
+              <th>Delivery date &amp; time</th>
+              <th><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="communicationRows"></tbody>
+        </table>
+      </div>
+      <div class="pagination"><span id="resultCount">1–5 of 248</span><span>‹ &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; … &nbsp; 25 &nbsp; ›</span></div>
+    </section>
+  </main>
+
+  <main id="modulePage" class="hidden">
+    <section class="page-heading">
+      <div><h1 id="moduleTitle"></h1><p id="moduleSubtitle"></p></div>
+      <button id="modulePrimaryAction" class="primary"></button>
+    </section>
+    <section id="moduleContent"></section>
+  </main>
+
+  <main id="composePage" class="hidden">
+    <section class="page-heading compose-heading">
+      <div>
+        <button id="exitCompose" class="back-link">‹ Back to communications</button>
+        <h1>New communication</h1>
+        <p>Create one campaign across audiences, channels and languages</p>
+      </div>
+      <span id="draftSaved" class="save-state">Draft saved</span>
+    </section>
+
+    <ol class="compose-steps" aria-label="Compose progress">
+      <li class="active" data-step-indicator="1"><span>1</span>Campaign</li>
+      <li data-step-indicator="2"><span>2</span>Audience</li>
+      <li data-step-indicator="3"><span>3</span>Channels</li>
+      <li data-step-indicator="4"><span>4</span>Content</li>
+      <li data-step-indicator="5"><span>5</span>Review</li>
+    </ol>
+
+    <section class="compose-card">
+      <div class="compose-step active" data-compose-step="1">
+        <div class="section-intro"><span class="step-kicker">STEP 1 OF 5</span><h2>Campaign details</h2><p>Give the communication an internal name and classify it.</p></div>
+        <div class="field-legend"><span><b>*</b> Required</span><span>Optional fields are labelled</span></div>
+        <div class="form-grid">
+          <label class="full">Campaign name <b class="required">*</b><input id="composeCampaign" value="Year 6 Parent Evening – Final Reminder"></label>
+          <label>Communication type <b class="required">*</b><span class="field-help">Controls how it is presented to parents.</span><select id="composeType"><option>Message</option><option>Notice</option><option>Circular</option></select></label>
+          <label>Category <span class="optional">Optional</span><span class="field-help">Used for filtering and reporting, e.g. Reminder or Event.</span><select id="composeCategory"><option value="">No category</option><option>Reminder</option><option>Newsletter</option><option>Event</option><option>Emergency</option><option>Academic</option></select></label>
+          <label>Languages <b class="required">*</b><span class="field-help">Select the original language and any translated versions.</span>
+            <button id="languagePickerButton" type="button" class="multi-select-button">English <span>▾</span></button>
+          </label>
+        </div>
+        <div class="start-section">
+          <h3>How would you like to start? <b class="required">*</b></h3>
+          <p>This chooses the starting content only. It does not save a new template automatically.</p>
+          <div class="template-start-options">
+            <button class="template-start active" data-template-start="blank"><span>＋</span><b>Blank communication</b><small>Start fresh with an empty editor</small></button>
+            <button class="template-start" data-template-start="saved"><span>▤</span><b>Use saved template</b><small>Choose from templates managed in Templates</small></button>
+            <button class="template-start" data-template-start="ai"><span>✦</span><b>Create with AI</b><small>Generate a reusable first draft from a brief</small></button>
+          </div>
+          <label id="savedTemplateField" class="saved-template-field hidden">Saved template <b class="required">*</b>
+            <select id="composeTemplate"><option value="">Select a template</option><option>Parent evening reminder</option><option>Weekly newsletter</option><option>Emergency closure</option></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="compose-step" data-compose-step="2">
+        <div class="section-intro"><span class="step-kicker">STEP 2 OF 5</span><h2>Select audience</h2><p>Use the existing school, year, class and custom-group targeting.</p></div>
+        <div class="audience-builder">
+          <div class="form-grid">
+            <label>Recipient <b class="required">*</b><select><option>Guardians</option><option>Staff</option></select></label>
+            <label>School section <select><option>Senior School</option><option>Junior School</option><option>Whole school</option></select></label>
+            <label>Year / grade <select><option>Year 6</option><option>Year 7</option><option>Year 8</option></select></label>
+            <label>Class <select><option>All Year 6 classes</option><option>6A</option><option>6B</option></select></label>
+            <label>Custom group <select><option>Parent Committee</option><option>Boarding Parents</option><option>New Joiners</option></select></label>
+            <label>Guardian relationship <select><option>All guardians</option><option>Primary guardian</option></select></label>
+          </div>
+          <div class="selected-audiences">
+            <h3>Selected audiences</h3>
+            <div id="composeAudienceChips">
+              <button>Year 6 ×</button><button>Year 7 ×</button><button>Class 8A ×</button><button>Class 8B ×</button>
+              <button>Parent Committee ×</button><button>Boarding Parents ×</button><button>New Joiners ×</button><button>Learning Support ×</button>
+            </div>
+            <div class="recipient-summary"><strong>1,842 guardians</strong><span>37 missing email · 12 missing mobile</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="compose-step" data-compose-step="3">
+        <div class="section-intro"><span class="step-kicker">STEP 3 OF 5</span><h2>Choose channels <b class="required">*</b></h2><p>Select at least one channel for this campaign.</p></div>
+        <div class="channel-selector">
+          <label class="channel-option selected"><input type="checkbox" value="Email" checked><span class="channel-icon">E</span><span><b>Email</b><small>Rich content, media and links</small></span></label>
+          <label class="channel-option selected"><input type="checkbox" value="Push" checked><span class="channel-icon">P</span><span><b>Push</b><small>Short notification linked to details</small></span></label>
+          <label class="channel-option selected"><input type="checkbox" value="SMS" checked><span class="channel-icon">S</span><span><b>SMS</b><small>Plain text for urgent reach</small></span></label>
+          <label class="channel-option"><input type="checkbox" value="WhatsApp"><span class="channel-icon">W</span><span><b>WhatsApp</b><small>Message and action link</small></span></label>
+        </div>
+        <div class="channel-warning"><b>Contact check</b><span>Email: 1,805 reachable · Mobile: 1,830 reachable</span></div>
+      </div>
+
+      <div class="compose-step" data-compose-step="4">
+        <div class="section-intro"><span class="step-kicker">STEP 4 OF 5</span><h2>Create content</h2><p>Write the original once, then review each channel variant.</p></div>
+        <div class="compose-editor-layout">
+          <div>
+            <div id="composeChannelTabs" class="segmented compose-channel-tabs"></div>
+            <label class="editor-label">Subject / title <b class="required">*</b><input id="composeSubject" value="Parent evening is tomorrow"></label>
+            <div class="editor-content-label">Content <b class="required">*</b></div>
+            <div class="editor-toolbar"><b>B</b><i>I</i><u>U</u><span>• List</span><button type="button" data-open-markers>Magic Markers ▾</button><button type="button">Photo</button><button type="button">Link</button><button type="button">Podcast</button><button type="button">Survey</button></div>
+            <textarea id="composeContent" class="content-editor">Dear {{Parent Name}},
+
+A reminder that the Year 6 parent evening takes place tomorrow from 4:00–7:00 PM.
+
+Please use your booking link to confirm your slot.
+
+Warm regards,
+Repton High School</textarea>
+            <div class="editor-meta"><span>Magic Markers retained from V1</span><span id="characterCount">0 characters</span></div>
+            <div class="media-strip"><div class="media-thumb">Photo</div><div><b>Parent evening booking</b><small>Rich link card attached</small></div><button class="secondary">Remove</button></div>
+          </div>
+          <aside class="ai-assistant">
+            <h3>AI assistant</h3><p>Changes are previewed before applying.</p>
+            <button data-open-ai-template><b>Create new template</b><span>Generate structured content from a brief</span></button>
+            <button data-ai-action="proofread"><b>Proofread</b><span>Grammar and spelling</span></button>
+            <button data-ai-action="rewrite"><b>Rewrite</b><span>Clearer, warmer tone</span></button>
+            <button data-ai-action="shorten"><b>Shorten</b><span>Reduce length</span></button>
+            <button data-ai-action="variants"><b>Generate channel variants</b><span>Create Push and SMS from Email</span></button>
+          </aside>
+        </div>
+      </div>
+
+      <div class="compose-step" data-compose-step="5">
+        <div class="section-intro"><span class="step-kicker">STEP 5 OF 5</span><h2>Review and delivery</h2><p>Confirm targeting, workflow and timing before submission.</p></div>
+        <div class="review-layout">
+          <div id="composeReview" class="review-list"></div>
+          <div class="delivery-settings">
+            <h3>Delivery</h3>
+            <label class="radio-row"><input type="radio" name="deliveryMode" value="now" checked><span><b>Send now</b><small>After approval, where required</small></span></label>
+            <label class="radio-row"><input type="radio" name="deliveryMode" value="schedule"><span><b>Schedule</b><small>Choose a future date and time</small></span></label>
+            <div id="scheduleFields" class="schedule-fields hidden"><input type="date" value="2026-06-25"><input type="time" value="09:00"></div>
+            <div class="approval-note"><b>Approval required</b><p>This school requires communication approval. It will be sent to <strong>Sarah Mitchell</strong>.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="compose-footer">
+        <button id="composePrevious" class="secondary hidden">Previous</button>
+        <div class="compose-footer-right">
+          <button id="saveDraft" class="secondary">Save draft</button>
+          <button id="composeNext" class="primary">Continue</button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <div id="scrim" class="scrim hidden"></div>
+
+  <aside id="filterDrawer" class="drawer filter-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div><h2>Filters</h2><p>Narrow the same communications list.</p></div>
+      <button class="close-button" data-close>×</button>
+    </div>
+    <form id="filterForm" class="filter-grid">
+      <label>Delivery date<select name="date"><option value="">Any date</option><option>Last 7 days</option><option>Last 30 days</option><option>Last 3 months</option><option>Custom range</option></select></label>
+      <label>Type<select name="type"><option value="">All types</option><option>Message</option><option>Notice</option><option>Circular</option></select></label>
+      <label>Status<select name="status"><option value="">All statuses</option><option>Sent</option><option>Scheduled</option><option>Pending approval</option><option>Rejected</option></select></label>
+      <label>Channel<select name="channel"><option value="">All channels</option><option>Email</option><option>Push</option><option>SMS</option><option>WhatsApp</option></select></label>
+      <label>Audience<select name="audience"><option value="">All audiences</option><option>Whole school</option><option>Year 6</option><option>Year 9</option></select></label>
+      <label>Sender<select name="sender"><option value="">Anyone</option><option>Me</option><option>A. Khan</option></select></label>
+      <label>Category<select name="category"><option value="">All categories</option><option>Reminder</option><option>Policy</option><option>Activities</option></select></label>
+      <label>Language<select name="language"><option value="">Any language</option><option>English</option><option>Arabic</option><option>French</option></select></label>
+    </form>
+    <div class="drawer-footer">
+      <button id="clearFilters" class="secondary">Clear all</button>
+      <button id="applyFilters" class="primary">Apply filters</button>
+    </div>
+  </aside>
+
+  <aside id="detailsDrawer" class="drawer details-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div>
+        <span id="detailType" class="type-label">MESSAGE</span>
+        <h2 id="detailSubject">Communication</h2>
+        <p id="detailMeta"></p>
+      </div>
+      <button class="close-button" data-close>×</button>
+    </div>
+    <div class="detail-statuses">
+      <span id="detailStatus" class="status"></span>
+    </div>
+    <div class="detail-tabs">
+      <button class="active" data-detail-tab="content">Content</button>
+      <button data-detail-tab="audience">Audience</button>
+      <button data-detail-tab="analytics">Analytics</button>
+      <button data-detail-tab="more">More</button>
+    </div>
+    <div id="detailBody" class="detail-body"></div>
+  </aside>
+
+  <dialog id="actionDialog">
+    <button class="close-button dialog-close">×</button>
+    <h2 id="dialogTitle"></h2>
+    <p id="dialogCopy"></p>
+    <textarea id="rejectionReason" class="hidden" placeholder="Add the rejection reason"></textarea>
+    <div class="dialog-actions">
+      <button class="secondary dialog-close">Cancel</button>
+      <button id="dialogConfirm" class="primary">Confirm</button>
+    </div>
+  </dialog>
+
+  <dialog id="aiTemplateDialog" class="ai-studio-dialog">
+    <button class="close-button" data-close-dialog="aiTemplateDialog">×</button>
+    <div class="ai-studio-header"><span class="ai-symbol">✦</span><div><h2>AI Template Studio</h2><p>Chat with AI, review the generated preview, then continue editing in Compose.</p></div></div>
+    <div class="ai-studio">
+      <section class="ai-chat-panel">
+        <div id="aiChatMessages" class="ai-chat-messages">
+          <div class="chat-message assistant"><b>AI assistant</b><p>What communication would you like to create?</p></div>
+          <div class="chat-message user"><b>You</b><p>Create a warm final reminder for Year 6 parents about tomorrow’s parent evening. Include booking instructions and a clear confirmation action.</p></div>
+          <div class="chat-message assistant"><b>AI assistant</b><p>I’ll create an email-led campaign with concise Push and SMS variants. Would you like a formal or warm tone?</p></div>
+        </div>
+        <div class="quick-prompts"><button data-ai-prompt="Make it warmer">Make it warmer</button><button data-ai-prompt="Make it shorter">Make it shorter</button><button data-ai-prompt="Add a clear CTA">Add a clear CTA</button></div>
+        <div class="chat-composer"><textarea id="aiTemplateBrief" placeholder="Reply to AI…">Warm and professional. Keep it concise.</textarea><button id="sendAiMessage" class="primary">Send</button></div>
+      </section>
+      <section class="ai-preview-panel">
+        <div class="ai-preview-toolbar"><div><b>Generated preview</b><small id="aiPreviewStatus">Draft ready</small></div><div class="segmented"><button class="active" data-ai-preview-channel="Email">Email</button><button data-ai-preview-channel="Push">Push</button><button data-ai-preview-channel="SMS">SMS</button></div></div>
+        <div id="aiGeneratedPreview" class="ai-generated-preview">
+          <div class="preview-email"><span>REPTON HIGH SCHOOL</span><h3>Parent evening is tomorrow</h3><p>Dear {{Parent Name}},</p><p>We’re looking forward to welcoming you to the Year 6 parents’ evening tomorrow from 4:00–7:00 PM.</p><p>Please use {{Booking Link}} to confirm your preferred time.</p><button>Confirm attendance</button></div>
+        </div>
+        <div class="ai-preview-actions"><button id="regenerateAiTemplate" class="secondary">Regenerate</button><button id="editAiDraft" class="primary">Use and edit draft</button></div>
+      </section>
+    </div>
+    <label class="save-template-choice"><input id="saveAsTemplate" type="checkbox"> Save the generated content as a reusable template in <b>Templates</b></label>
+  </dialog>
+
+  <dialog id="languageDialog" class="large-dialog">
+    <button class="close-button" data-close-dialog="languageDialog">×</button>
+    <h2>Select languages</h2>
+    <p>English is the original. Additional languages create editable translated content versions.</p>
+    <input id="languageSearch" class="dialog-search" type="search" placeholder="Search languages">
+    <div id="languageList" class="language-list"></div>
+    <div class="dialog-actions"><button class="secondary" data-close-dialog="languageDialog">Cancel</button><button id="applyLanguages" class="primary">Apply languages</button></div>
+  </dialog>
+
+  <dialog id="markerDialog" class="large-dialog">
+    <button class="close-button" data-close-dialog="markerDialog">×</button>
+    <h2>Magic Markers</h2>
+    <p>Select a marker to insert it at the cursor. The value is personalised for each recipient.</p>
+    <input id="markerSearch" class="dialog-search" type="search" placeholder="Search markers">
+    <div id="markerList" class="marker-list"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+  <button class="mobile-compose-fab" data-open-compose aria-label="Compose communication">＋</button>
+  <script src="app.js"></script>
+</body>
+</html>
