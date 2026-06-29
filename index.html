@@ -61,12 +61,6 @@
         <b>Sent</b>
         <small>Delivered or attempted</small>
       </button>
-      <button class="summary" data-summary="Pending approval">
-        <span class="summary-icon amber">P</span>
-        <strong>6</strong>
-        <b>Pending approval</b>
-        <small>2 awaiting your review</small>
-      </button>
       <button class="summary" data-summary="Scheduled">
         <span class="summary-icon blue">S</span>
         <strong>12</strong>
@@ -90,7 +84,7 @@
             <option>This academic year</option>
             <option>Custom range</option>
           </select>
-          <input id="tableSearch" type="search" placeholder="Search campaign or keyword">
+          <input id="tableSearch" type="search" placeholder="Search broadcast or keyword">
           <button id="filterButton" class="secondary">Filters <span id="filterCount"></span></button>
           <button id="refreshButton" class="secondary">Refresh</button>
         </div>
@@ -102,8 +96,8 @@
         <table>
           <thead>
             <tr>
-              <th>Campaign name</th>
-              <th>Type</th>
+              <th>Broadcast name</th>
+              <th>Category</th>
               <th>Audience</th>
               <th>Channel</th>
               <th>Status</th>
@@ -130,14 +124,14 @@
     <section class="page-heading compose-heading">
       <div>
         <button id="exitCompose" class="back-link">‹ Back to communications</button>
-        <h1>New communication</h1>
-        <p>Create one campaign across audiences, channels and languages</p>
+        <h1>New broadcast</h1>
+        <p>Create one broadcast across audiences, channels and languages</p>
       </div>
       <span id="draftSaved" class="save-state">Draft saved</span>
     </section>
 
     <ol class="compose-steps" aria-label="Compose progress">
-      <li class="active" data-step-indicator="1"><span>1</span>Campaign</li>
+      <li class="active" data-step-indicator="1"><span>1</span>Broadcast</li>
       <li data-step-indicator="2"><span>2</span>Audience</li>
       <li data-step-indicator="3"><span>3</span>Channels</li>
       <li data-step-indicator="4"><span>4</span>Content</li>
@@ -146,56 +140,94 @@
 
     <section class="compose-card">
       <div class="compose-step active" data-compose-step="1">
-        <div class="section-intro"><span class="step-kicker">STEP 1 OF 5</span><h2>Campaign details</h2><p>Give the communication an internal name and classify it.</p></div>
+        <div class="section-intro"><span class="step-kicker">STEP 1 OF 5</span><h2>Broadcast details</h2><p>Give the broadcast an internal name and classify it.</p></div>
         <div class="field-legend"><span><b>*</b> Required</span><span>Optional fields are labelled</span></div>
         <div class="form-grid">
-          <label class="full">Campaign name <b class="required">*</b><input id="composeCampaign" value="Year 6 Parent Evening – Final Reminder"></label>
-          <label>Communication type <b class="required">*</b><span class="field-help">Controls how it is presented to parents.</span><select id="composeType"><option>Message</option><option>Notice</option><option>Circular</option></select></label>
-          <label>Category <span class="optional">Optional</span><span class="field-help">Used for filtering and reporting, e.g. Reminder or Event.</span><select id="composeCategory"><option value="">No category</option><option>Reminder</option><option>Newsletter</option><option>Event</option><option>Emergency</option><option>Academic</option></select></label>
+          <label class="full">Broadcast name <b class="required">*</b><input id="composeCampaign" value="Year 6 Parent Evening – Final Reminder"></label>
+          <label>Category <b class="required">*</b><span class="field-help">Used for filtering, reporting and how the broadcast is presented.</span><select id="composeCategory"><option value="">Select category</option><option>Message</option><option>Notice</option><option>Circular</option><option>Reminder</option><option value="payment-reminder">Payment reminder</option><option>Newsletter</option><option>Event</option><option>Emergency</option><option>Academic</option></select></label>
           <label>Languages <b class="required">*</b><span class="field-help">Select the original language and any translated versions.</span>
             <button id="languagePickerButton" type="button" class="multi-select-button">English <span>▾</span></button>
-          </label>
-        </div>
-        <div class="start-section">
-          <h3>How would you like to start? <b class="required">*</b></h3>
-          <p>This chooses the starting content only. It does not save a new template automatically.</p>
-          <div class="template-start-options">
-            <button class="template-start active" data-template-start="blank"><span>＋</span><b>Blank communication</b><small>Start fresh with an empty editor</small></button>
-            <button class="template-start" data-template-start="saved"><span>▤</span><b>Use saved template</b><small>Choose from templates managed in Templates</small></button>
-            <button class="template-start" data-template-start="ai"><span>✦</span><b>Create with AI</b><small>Generate a reusable first draft from a brief</small></button>
-          </div>
-          <label id="savedTemplateField" class="saved-template-field hidden">Saved template <b class="required">*</b>
-            <select id="composeTemplate"><option value="">Select a template</option><option>Parent evening reminder</option><option>Weekly newsletter</option><option>Emergency closure</option></select>
           </label>
         </div>
       </div>
 
       <div class="compose-step" data-compose-step="2">
-        <div class="section-intro"><span class="step-kicker">STEP 2 OF 5</span><h2>Select audience</h2><p>Use the existing school, year, class and custom-group targeting.</p></div>
+        <div class="section-intro"><span class="step-kicker">STEP 2 OF 5</span><h2>Select audience</h2><p>Guardian and Staff use their existing, different targeting filters. Both can be included in one broadcast.</p></div>
         <div class="audience-builder">
-          <div class="form-grid">
-            <label>Recipient <b class="required">*</b><select><option>Guardians</option><option>Staff</option></select></label>
-            <label>School section <select><option>Senior School</option><option>Junior School</option><option>Whole school</option></select></label>
-            <label>Year / grade <select><option>Year 6</option><option>Year 7</option><option>Year 8</option></select></label>
-            <label>Class <select><option>All Year 6 classes</option><option>6A</option><option>6B</option></select></label>
-            <label>Custom group <select><option>Parent Committee</option><option>Boarding Parents</option><option>New Joiners</option></select></label>
-            <label>Guardian relationship <select><option>All guardians</option><option>Primary guardian</option></select></label>
+          <div class="audience-config">
+            <section class="audience-section-card">
+              <div class="audience-section-heading"><div><span class="type-label">TO</span><h3>Primary recipients</h3></div></div>
+              <label class="recipient-type-field">Recipient type <b class="required">*</b>
+                <select id="toRecipientType"><option value="guardian">Guardians</option><option value="staff">Staff</option><option value="both" selected>Guardians and Staff</option></select>
+              </label>
+              <div id="toGuardianFilters" class="recipient-filter-panel">
+                <div class="filter-panel-title"><b>Guardian filters</b><span>1,842 selected</span></div>
+                <div class="form-grid compact">
+                  <label>Class group<select><option>Senior School</option><option>Junior School</option><option>Whole school</option></select></label>
+                  <label>Year / grade<select><option>Year 6 and Year 7</option><option>Year 6</option><option>Year 7</option></select></label>
+                  <label>Class<select><option>6A, 6B, 7A and 7B</option><option>All selected grades</option></select></label>
+                  <label>Student status<select><option>Active students</option><option>New joiners</option><option>All</option></select></label>
+                  <label>Student / custom group<select><option>All selected classes</option><option>Boarding Parents</option><option>Parent Committee</option></select></label>
+                  <label>Guardian relationship<select><option>Primary guardians</option><option>Father and Mother</option><option>All guardians</option></select></label>
+                </div>
+              </div>
+              <div id="toStaffFilters" class="recipient-filter-panel">
+                <div class="filter-panel-title"><b>Staff filters</b><span>126 selected</span></div>
+                <div class="form-grid compact">
+                  <label>Staff group<select><option>Teaching staff and Year heads</option><option>Administration</option><option>All staff</option></select></label>
+                  <label>Department<select><option>All departments</option><option>Mathematics</option><option>Pastoral</option></select></label>
+                  <label class="full">Individual staff<select><option>All staff in selected groups</option><option>Sarah Mitchell</option><option>David Clarke</option></select></label>
+                </div>
+              </div>
+            </section>
+
+            <section class="audience-section-card">
+              <div class="audience-section-heading"><div><span class="type-label">CC</span><h3>Copied recipients</h3></div><span class="optional">Optional</span></div>
+              <label class="recipient-type-field">Recipient type
+                <select id="ccRecipientType"><option value="none">No CC recipients</option><option value="guardian">Guardians</option><option value="staff" selected>Staff</option><option value="both">Guardians and Staff</option></select>
+              </label>
+              <div id="ccGuardianFilters" class="recipient-filter-panel hidden">
+                <div class="filter-panel-title"><b>Guardian CC filters</b><span>0 selected</span></div>
+                <div class="form-grid compact">
+                  <label>Class / grade<select><option>Choose class or grade</option><option>Year 6</option><option>Year 7</option></select></label>
+                  <label>Guardian relationship<select><option>Primary guardians</option><option>All guardians</option></select></label>
+                  <label class="full">Students / groups<select><option>Choose students or groups</option><option>Parent Committee</option></select></label>
+                </div>
+              </div>
+              <div id="ccStaffFilters" class="recipient-filter-panel">
+                <div class="filter-panel-title"><b>Staff CC filters</b><span>12 selected</span></div>
+                <div class="form-grid compact">
+                  <label>Staff group<select><option>Senior leadership</option><option>Finance administrators</option></select></label>
+                  <label>Department<select><option>All departments</option><option>Finance</option></select></label>
+                  <label class="full">Individual staff<select><option>All staff in selected groups</option><option>Sarah Mitchell</option></select></label>
+                </div>
+              </div>
+            </section>
+
+            <details class="copy-recipient-card">
+              <summary><span><b>BCC email addresses</b><small>External Email only</small></span><span>Optional</span></summary>
+              <div class="copy-recipient-content single">
+                <label>Approved additional recipients <span class="new-badge">New UI</span><input type="text" placeholder="Email addresses, separated by commas"><small>Bulk guardian privacy masking remains automatic.</small></label>
+              </div>
+            </details>
           </div>
           <div class="selected-audiences">
-            <h3>Selected audiences</h3>
+            <span class="step-kicker">LIVE SUMMARY</span><h3>Selected recipients</h3>
+            <div class="recipient-count-grid"><div id="guardianCountCard"><strong id="guardianRecipientCount">1,842</strong><span>Guardians</span></div><div id="staffCountCard"><strong id="staffRecipientCount">126</strong><span>Staff</span></div><div><strong id="totalRecipientCount">1,968</strong><span>Total TO</span></div></div>
             <div id="composeAudienceChips">
-              <button>Year 6 ×</button><button>Year 7 ×</button><button>Class 8A ×</button><button>Class 8B ×</button>
-              <button>Parent Committee ×</button><button>Boarding Parents ×</button><button>New Joiners ×</button><button>Learning Support ×</button>
+              <button>Year 6 ×</button><button>Year 7 ×</button><button>6A–7B ×</button><button>Teaching staff ×</button><button>Year heads ×</button>
             </div>
-            <div class="recipient-summary"><strong>1,842 guardians</strong><span>37 missing email · 12 missing mobile</span></div>
+            <div class="cc-count-summary"><b>CC</b><span id="ccRecipientSummary">12 staff</span></div>
+            <div class="recipient-summary"><strong>Contact readiness</strong><span>37 guardians missing email · 12 missing mobile · 2 staff missing email</span></div>
           </div>
         </div>
       </div>
 
       <div class="compose-step" data-compose-step="3">
-        <div class="section-intro"><span class="step-kicker">STEP 3 OF 5</span><h2>Choose channels <b class="required">*</b></h2><p>Select at least one channel for this campaign.</p></div>
+        <div class="section-intro"><span class="step-kicker">STEP 3 OF 5</span><h2>Choose channels <b class="required">*</b></h2><p>Select at least one channel for this broadcast.</p></div>
         <div class="channel-selector">
           <label class="channel-option selected"><input type="checkbox" value="Email" checked><span class="channel-icon">E</span><span><b>Email</b><small>Rich content, media and links</small></span></label>
+          <label class="channel-option selected"><input type="checkbox" value="InMail" checked><span class="channel-icon">I</span><span><b>InMail</b><small>Internal mailbox inside the parent/staff app</small></span></label>
           <label class="channel-option selected"><input type="checkbox" value="Push" checked><span class="channel-icon">P</span><span><b>Push</b><small>Short notification linked to details</small></span></label>
           <label class="channel-option selected"><input type="checkbox" value="SMS" checked><span class="channel-icon">S</span><span><b>SMS</b><small>Plain text for urgent reach</small></span></label>
           <label class="channel-option"><input type="checkbox" value="WhatsApp"><span class="channel-icon">W</span><span><b>WhatsApp</b><small>Message and action link</small></span></label>
@@ -205,12 +237,25 @@
 
       <div class="compose-step" data-compose-step="4">
         <div class="section-intro"><span class="step-kicker">STEP 4 OF 5</span><h2>Create content</h2><p>Write the original once, then review each channel variant.</p></div>
+        <div class="start-section content-start-section">
+          <h3>Start content from <b class="required">*</b></h3>
+          <p>This only controls the content starting point. Audience, category and delivery remain part of this broadcast.</p>
+          <div class="template-start-options">
+            <button class="template-start active" data-template-start="blank"><span>＋</span><b>Blank content</b><small>Start fresh with an empty editor</small></button>
+            <button class="template-start" data-template-start="saved"><span>▤</span><b>Saved template</b><small>Load subject, body, variants and languages</small></button>
+            <button class="template-start" data-template-start="ai"><span>✦</span><b>AI create</b><small>Generate a reusable first draft from a brief</small></button>
+          </div>
+          <label id="savedTemplateField" class="saved-template-field hidden">Saved template <b class="required">*</b>
+            <select id="composeTemplate"><option value="">Select a template</option><option>Parent evening reminder</option><option>Weekly newsletter</option><option>Emergency closure</option></select>
+          </label>
+        </div>
         <div class="compose-editor-layout">
-          <div>
+          <div class="gmail-compose-box">
             <div id="composeChannelTabs" class="segmented compose-channel-tabs"></div>
-            <label class="editor-label">Subject / title <b class="required">*</b><input id="composeSubject" value="Parent evening is tomorrow"></label>
-            <div class="editor-content-label">Content <b class="required">*</b></div>
-            <div class="editor-toolbar"><b>B</b><i>I</i><u>U</u><span>• List</span><button type="button" data-open-markers>Magic Markers ▾</button><button type="button">Photo</button><button type="button">Link</button><button type="button">Podcast</button><button type="button">Survey</button></div>
+            <div id="composeLanguageTabs" class="segmented compose-language-tabs"></div>
+            <div class="gmail-window-header"><b>New Message</b><span>− ↗ ×</span></div>
+            <div class="gmail-to-row"><span>To</span><strong>1,842 guardians, 126 staff</strong><button type="button">Cc</button><button type="button">Bcc</button></div>
+            <label class="gmail-subject-row"><span>Subject</span><input id="composeSubject" value="Parent evening is tomorrow"></label>
             <textarea id="composeContent" class="content-editor">Dear {{Parent Name}},
 
 A reminder that the Year 6 parent evening takes place tomorrow from 4:00–7:00 PM.
@@ -219,30 +264,49 @@ Please use your booking link to confirm your slot.
 
 Warm regards,
 Repton High School</textarea>
-            <div class="editor-meta"><span>Magic Markers retained from V1</span><span id="characterCount">0 characters</span></div>
-            <div class="media-strip"><div class="media-thumb">Photo</div><div><b>Parent evening booking</b><small>Rich link card attached</small></div><button class="secondary">Remove</button></div>
+            <div class="gmail-compose-footer">
+              <div class="editor-toolbar"><select aria-label="Font"><option>Sans Serif</option></select><b>B</b><i>I</i><u>U</u><span>• List</span><button type="button" data-open-markers>Magic Markers</button></div>
+              <span id="characterCount">0 characters</span>
+            </div>
+            <div class="gmail-attach-bar" aria-label="Compose attachments">
+              <button type="button" class="gmail-send-button">Send</button>
+              <button type="button">Attach file</button>
+              <button type="button">Insert image</button>
+              <button type="button">Insert link</button>
+              <button type="button">Survey</button>
+            </div>
           </div>
           <aside class="ai-assistant">
             <h3>AI assistant</h3><p>Changes are previewed before applying.</p>
-            <button data-open-ai-template><b>Create new template</b><span>Generate structured content from a brief</span></button>
-            <button data-ai-action="proofread"><b>Proofread</b><span>Grammar and spelling</span></button>
-            <button data-ai-action="rewrite"><b>Rewrite</b><span>Clearer, warmer tone</span></button>
-            <button data-ai-action="shorten"><b>Shorten</b><span>Reduce length</span></button>
-            <button data-ai-action="variants"><b>Generate channel variants</b><span>Create Push and SMS from Email</span></button>
+            <button data-open-ai-template><b>Create template</b><span>Generate structured broadcast content from a brief</span></button>
+            <button data-ai-action="translate"><b>Translate</b><span>Create content for selected languages</span></button>
+            <button data-ai-action="rewrite"><b>Improve text</b><span>Fix grammar, clarity and tone</span></button>
+            <button data-ai-action="variants"><b>Channel variants</b><span>Create Push and SMS from Email</span></button>
           </aside>
         </div>
       </div>
 
       <div class="compose-step" data-compose-step="5">
-        <div class="section-intro"><span class="step-kicker">STEP 5 OF 5</span><h2>Review and delivery</h2><p>Confirm targeting, workflow and timing before submission.</p></div>
+        <div class="section-intro"><span class="step-kicker">STEP 5 OF 5</span><h2>Review and delivery</h2><p>Confirm targeting and timing before submission.</p></div>
         <div class="review-layout">
           <div id="composeReview" class="review-list"></div>
           <div class="delivery-settings">
             <h3>Delivery</h3>
-            <label class="radio-row"><input type="radio" name="deliveryMode" value="now" checked><span><b>Send now</b><small>After approval, where required</small></span></label>
-            <label class="radio-row"><input type="radio" name="deliveryMode" value="schedule"><span><b>Schedule</b><small>Choose a future date and time</small></span></label>
+            <label class="radio-row"><input type="radio" name="deliveryMode" value="now" checked><span><b>Send now</b><small>Send immediately using selected channels</small></span></label>
+            <label class="radio-row"><input type="radio" name="deliveryMode" value="schedule"><span><b>Schedule once</b><small>Existing functionality: choose one future date and time</small></span></label>
             <div id="scheduleFields" class="schedule-fields hidden"><input type="date" value="2026-06-25"><input type="time" value="09:00"></div>
-            <div class="approval-note"><b>Approval required</b><p>This school requires communication approval. It will be sent to <strong>Sarah Mitchell</strong>.</p></div>
+            <label class="radio-row"><input type="radio" name="deliveryMode" value="recurring"><span><b>Reminder schedule</b><small>Choose when this communication should repeat</small></span></label>
+            <div id="recurringFields" class="reminder-scheduler hidden">
+              <div class="reminder-scheduler-heading"><div><span class="type-label">TIMING ONLY</span><h4>Reminder timing</h4><p>The selected audience, channels and content will be reused for every reminder.</p></div><span id="reminderPlanCount">4 reminders</span></div>
+              <div class="google-repeat-card">
+                <label>Starts <b class="required">*</b><input id="reminderStartDate" type="date" value="2026-06-25"></label>
+                <label>Send time <b class="required">*</b><input id="reminderSendTime" type="time" value="09:00"></label>
+                <div class="repeat-line"><span>Repeat every</span><input id="repeatEvery" type="number" min="1" value="1"><select id="reminderFrequency"><option value="daily">day</option><option value="weekly" selected>week</option><option value="monthly">month</option></select></div>
+                <div class="repeat-days"><span>Repeat on</span><button type="button">S</button><button type="button" class="active">M</button><button type="button">T</button><button type="button">W</button><button type="button">T</button><button type="button">F</button><button type="button">S</button></div>
+                <div class="ends-section"><span>Ends</span><label><input type="radio" name="repeatEnds" value="never"> Never</label><label><input type="radio" name="repeatEnds" value="on" checked> On <input id="reminderEndDate" type="date" value="2026-07-16"></label><label><input type="radio" name="repeatEnds" value="after"> After <input type="number" min="1" value="4"> occurrences</label></div>
+              </div>
+              <div class="scheduler-note"><b>Applied to every reminder</b><span id="scheduleReuseSummary">Current broadcast audience · selected broadcast channels · current broadcast content</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -266,9 +330,9 @@ Repton High School</textarea>
     </div>
     <form id="filterForm" class="filter-grid">
       <label>Delivery date<select name="date"><option value="">Any date</option><option>Last 7 days</option><option>Last 30 days</option><option>Last 3 months</option><option>Custom range</option></select></label>
-      <label>Type<select name="type"><option value="">All types</option><option>Message</option><option>Notice</option><option>Circular</option></select></label>
-      <label>Status<select name="status"><option value="">All statuses</option><option>Sent</option><option>Scheduled</option><option>Pending approval</option><option>Rejected</option></select></label>
-      <label>Channel<select name="channel"><option value="">All channels</option><option>Email</option><option>Push</option><option>SMS</option><option>WhatsApp</option></select></label>
+      <label>Category<select name="category"><option value="">All categories</option><option>Message</option><option>Notice</option><option>Circular</option><option>Reminder</option><option>Newsletter</option><option>Emergency</option></select></label>
+      <label>Status<select name="status"><option value="">All statuses</option><option>Sent</option><option>Scheduled</option></select></label>
+      <label>Channel<select name="channel"><option value="">All channels</option><option>Email</option><option>InMail</option><option>Push</option><option>SMS</option><option>WhatsApp</option></select></label>
       <label>Audience<select name="audience"><option value="">All audiences</option><option>Whole school</option><option>Year 6</option><option>Year 9</option></select></label>
       <label>Sender<select name="sender"><option value="">Anyone</option><option>Me</option><option>A. Khan</option></select></label>
       <label>Category<select name="category"><option value="">All categories</option><option>Reminder</option><option>Policy</option><option>Activities</option></select></label>
@@ -305,11 +369,37 @@ Repton High School</textarea>
     <button class="close-button dialog-close">×</button>
     <h2 id="dialogTitle"></h2>
     <p id="dialogCopy"></p>
-    <textarea id="rejectionReason" class="hidden" placeholder="Add the rejection reason"></textarea>
     <div class="dialog-actions">
       <button class="secondary dialog-close">Cancel</button>
       <button id="dialogConfirm" class="primary">Confirm</button>
     </div>
+  </dialog>
+
+  <dialog id="templateSetupDialog" class="template-setup-dialog">
+    <button class="close-button" data-close-dialog="templateSetupDialog">×</button>
+    <div class="template-dialog-heading">
+      <span class="type-label">TEMPLATE REPOSITORY</span>
+      <h2>Create template</h2>
+      <p>Choose how this reusable template should be created. Audience and delivery are selected later in Broadcast.</p>
+    </div>
+    <div class="template-setup-grid">
+      <label class="full">Template name <b class="required">*</b><input id="newTemplateName" value="Parent event invitation"></label>
+      <label class="full">Category <b class="required">*</b><select><option>Event</option><option>Reminder</option><option>Newsletter</option><option>Emergency</option><option>Notice</option><option>Circular</option></select></label>
+    </div>
+    <fieldset class="email-source">
+      <legend>Creation option <b class="required">*</b></legend>
+      <label class="source-option selected"><input type="radio" name="templateCreationMode" value="new" checked><span><b>Create new</b><small>Open a blank template editor and type the content manually.</small></span></label>
+      <label class="source-option"><input type="radio" name="templateCreationMode" value="ai"><span><b>Create using AI</b><small>Start with a prompt, preview the generated template, then edit before saving.</small></span></label>
+      <label class="source-option"><input type="radio" name="templateCreationMode" value="sendgrid"><span><b>Link SendGrid</b><small>Store a SendGrid Dynamic Template ID in the K12 template repository.</small></span></label>
+    </fieldset>
+    <section id="sendgridLinkFields" class="sendgrid-link-fields hidden">
+      <div class="sendgrid-status-line"><div><b>SendGrid email configuration</b><small>Only authorised administrators should change this connection.</small></div><span id="sendgridConnectionStatus" class="connection-status">Not validated</span></div>
+      <label>SendGrid template ID <b class="required">*</b><input id="sendgridTemplateId" placeholder="Example: d-1234567890abcdef"></label>
+      <label>Expected dynamic fields <span class="optional">Optional</span><input id="sendgridVariables" value="parent_name, student_name, school_name, booking_link"></label>
+      <div class="sendgrid-actions"><button id="validateSendgridTemplate" class="secondary">Validate connection</button><button id="previewSendgridTemplate" class="secondary" disabled>Preview email</button><button id="testSendgridTemplate" class="secondary" disabled>Send test</button></div>
+      <p class="integration-note">K12 stores the external template ID, required variables, channels, languages, ownership and version. The email design remains editable in SendGrid.</p>
+    </section>
+    <div class="dialog-actions"><button class="secondary" data-close-dialog="templateSetupDialog">Cancel</button><button id="continueTemplateSetup" class="primary">Create new template</button></div>
   </dialog>
 
   <dialog id="aiTemplateDialog" class="ai-studio-dialog">
@@ -317,11 +407,7 @@ Repton High School</textarea>
     <div class="ai-studio-header"><span class="ai-symbol">✦</span><div><h2>AI Template Studio</h2><p>Chat with AI, review the generated preview, then continue editing in Compose.</p></div></div>
     <div class="ai-studio">
       <section class="ai-chat-panel">
-        <div id="aiChatMessages" class="ai-chat-messages">
-          <div class="chat-message assistant"><b>AI assistant</b><p>What communication would you like to create?</p></div>
-          <div class="chat-message user"><b>You</b><p>Create a warm final reminder for Year 6 parents about tomorrow’s parent evening. Include booking instructions and a clear confirmation action.</p></div>
-          <div class="chat-message assistant"><b>AI assistant</b><p>I’ll create an email-led campaign with concise Push and SMS variants. Would you like a formal or warm tone?</p></div>
-        </div>
+        <div id="aiChatMessages" class="ai-chat-messages empty-ai-chat"><div class="empty-state"><b>Start with a brief</b><p>Describe the template you need. AI will generate a first draft and channel preview.</p></div></div>
         <div class="quick-prompts"><button data-ai-prompt="Make it warmer">Make it warmer</button><button data-ai-prompt="Make it shorter">Make it shorter</button><button data-ai-prompt="Add a clear CTA">Add a clear CTA</button></div>
         <div class="chat-composer"><textarea id="aiTemplateBrief" placeholder="Reply to AI…">Warm and professional. Keep it concise.</textarea><button id="sendAiMessage" class="primary">Send</button></div>
       </section>
@@ -333,7 +419,7 @@ Repton High School</textarea>
         <div class="ai-preview-actions"><button id="regenerateAiTemplate" class="secondary">Regenerate</button><button id="editAiDraft" class="primary">Use and edit draft</button></div>
       </section>
     </div>
-    <label class="save-template-choice"><input id="saveAsTemplate" type="checkbox"> Save the generated content as a reusable template in <b>Templates</b></label>
+    <label class="save-template-choice template-name-save"><input id="saveAsTemplate" type="checkbox" checked> Save the generated content as a reusable template in <b>Templates</b><input id="aiTemplateName" type="text" value="Parent evening reminder template" aria-label="Template name"></label>
   </dialog>
 
   <dialog id="languageDialog" class="large-dialog">
@@ -347,10 +433,42 @@ Repton High School</textarea>
 
   <dialog id="markerDialog" class="large-dialog">
     <button class="close-button" data-close-dialog="markerDialog">×</button>
-    <h2>Magic Markers</h2>
-    <p>Select a marker to insert it at the cursor. The value is personalised for each recipient.</p>
-    <input id="markerSearch" class="dialog-search" type="search" placeholder="Search markers">
-    <div id="markerList" class="marker-list"></div>
+    <div class="marker-dialog-heading"><div><h2>Magic Markers</h2><p>Select a marker to insert it into the email body.</p></div></div>
+    <input id="markerSearch" class="dialog-search" type="search" placeholder="Search parent, student, class, payment or link markers">
+    <div id="markerList" class="simple-marker-list"></div>
+  </dialog>
+
+  <dialog id="recipientAnalyticsDialog" class="recipient-analytics-dialog">
+    <button class="close-button" data-close-dialog="recipientAnalyticsDialog">×</button>
+    <div class="recipient-dialog-heading">
+      <div><span id="recipientEventBadge" class="type-label">OPENED</span><h2 id="recipientAnalyticsTitle">Recipient activity</h2><p id="recipientAnalyticsSubtitle"></p></div>
+      <button class="secondary">Export CSV</button>
+    </div>
+    <div class="recipient-dialog-toolbar">
+      <input id="recipientAnalyticsSearch" type="search" placeholder="Search name, email or student">
+      <select id="recipientChannelFilter"><option>All channels</option><option>Email</option><option>Push</option><option>SMS</option><option>WhatsApp</option></select>
+    </div>
+    <div class="recipient-table-wrap">
+      <table class="recipient-table">
+        <thead><tr><th>Recipient</th><th>Student</th><th>Contact</th><th>Channel</th><th>Activity</th><th>Date &amp; time</th></tr></thead>
+        <tbody id="recipientAnalyticsRows"></tbody>
+      </table>
+    </div>
+    <div class="pagination"><span id="recipientResultCount"></span><span>‹ &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; ›</span></div>
+  </dialog>
+
+  <dialog id="reminderCalendarDialog" class="reminder-calendar-dialog">
+    <button class="close-button" data-close-dialog="reminderCalendarDialog">×</button>
+    <span class="type-label">REMINDER CALENDAR</span>
+    <h2>July 2026</h2>
+    <p>Generated reminder dates are shown alongside other scheduled communications.</p>
+    <div class="mini-calendar">
+      <div class="mini-calendar-head">Mon</div><div class="mini-calendar-head">Tue</div><div class="mini-calendar-head">Wed</div><div class="mini-calendar-head">Thu</div><div class="mini-calendar-head">Fri</div><div class="mini-calendar-head">Sat</div><div class="mini-calendar-head">Sun</div>
+      <div class="mini-day muted">29</div><div class="mini-day muted">30</div><div class="mini-day">1</div><div class="mini-day selected">2<span>Reminder 2</span></div><div class="mini-day">3</div><div class="mini-day">4</div><div class="mini-day">5</div>
+      <div class="mini-day">6</div><div class="mini-day">7</div><div class="mini-day">8</div><div class="mini-day selected">9<span>Reminder 3</span></div><div class="mini-day">10</div><div class="mini-day unavailable">11<span>3 comms</span></div><div class="mini-day">12</div>
+      <div class="mini-day">13</div><div class="mini-day">14</div><div class="mini-day">15</div><div class="mini-day selected">16<span>Reminder 4</span></div><div class="mini-day">17</div><div class="mini-day">18</div><div class="mini-day">19</div>
+    </div>
+    <div class="dialog-actions"><button class="primary" data-close-dialog="reminderCalendarDialog">Done</button></div>
   </dialog>
 
   <div id="toast" class="toast" role="status"></div>
